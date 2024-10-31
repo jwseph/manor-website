@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class='bg-[#f00]'>
+  <head>
+    <meta charset="UTF-8">
+    
+    <!--Allow scaling on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Halloween Quiz</title>
+    
+    <!--Tailwind CSS import-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Eater&amp;display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  <body class="bg-black text-orange-300 min-h-screen">
+    <!--<nav class="bg-zinc-800 text-white px-8 py-4 flex flex-row gap-8">-->
+    <!--  <a href="/" class="font-bold">Home</a>-->
+    <!--  <div class="grow"></div>-->
+    <!--  <a href="https://example.com">Hello</a>-->
+    <!--  <a href="https://example.com">Dog</a>-->
+    <!--  <a href="https://example.com">Dog</a>-->
+    <!--</nav>-->
+    <main class="p-8 space-y-16" style="font-family: Eater">
+      <div class="space-y-16 max-w-5xl mx-auto w-full py-8 text-center">
+        <!--h1 doesn"t make any difference with Tailwind but is good practice-->
+        <h1 class="text-3xl font-bold text-orange-500">Halloween Quiz</h1>
+        
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+          <label for="riddleInput0" class="w-full">
+          <p>
+            [Obligated shock/sound warning]
+          </p>
+          <br>
+          <p>
+            You can see me at night
+          </p>
+          <p>
+            A delight at first sight
+          </p>
+          <p>
+            Continuously I expand
+          </p>
+          <p>
+            And am what cats demand
+          </p>
+          <p>
+            What am i?
+          </p>
+          </label>
+          <input id="riddleInput0" placeholder="" class="w-48 bg-transparent border border-orange-300 placeholder:text-orange-300/50 px-3 py-2" />
+        </div>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+          <label for="riddleInput1" class="w-full">
+          <p>
+            Most for the palate, some for the eye,
+          </p>
+          <p>
+            A gift to say "sorry", "congrats", and "goodbye",
+          </p>
+          <p>
+            I'm cotton, a name, and halloween, too
+          </p>
+          <p>
+            Taken with planning, or on the fly.
+          </p>
+          </label>
+          <input id="riddleInput1" placeholder="" class="w-48 bg-transparent border border-orange-300 placeholder:text-orange-300/50 px-3 py-2" />
+        </div>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+          <label for="riddleInput2" class="w-full">
+          <p>
+            You get me when you park in a place off limits.
+          </p>
+          <p>
+            I live in a swamp. I'm the one who ribbits.
+          </p>
+          </label>
+          <input id="riddleInput2" placeholder="" class="w-48 bg-transparent border border-orange-300 placeholder:text-orange-300/50 px-3 py-2" />
+        </div>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+          <label for="riddleInput3" class="w-full">
+          <p>
+            A man shot two arrows at its center and missed both times, but using a sword swung once at its center and hit it twice.
+          </p>
+          </label>
+          <input id="riddleInput3" placeholder="" class="w-48 bg-transparent border border-orange-300 placeholder:text-orange-300/50 px-3 py-2" />
+        </div>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+          <label for="riddleInput4" class="w-full">
+          <p>
+            With 48 or more teeth in my skull, I am always growing
+          </p>
+          <p>
+            Always hungry, and always consuming
+          </p>
+          <p>
+            Though I speak in a language no one understand
+          </p>
+          <p>
+            Manipulating adult humans to my will, I can bend
+          </p>
+          <p>
+            With a single cry, I bring worry, panic, and even terror
+          </p>
+          <p>
+            And yet, surprise, I am no eldritch horror
+          </p>
+          <p>
+            What am I?
+          </p>
+          </label>
+          <input id="riddleInput4" placeholder="" class="w-48 bg-transparent border border-orange-300 placeholder:text-orange-300/50 px-3 py-2" />
+        </div>
+        <div id='jumpscare' style="display: none;">
+          <img src='https://jwseph.github.io/manor-website/baby_jumpscare.gif' class='absolute left-0 right-0 bottom-0 top-0 object-fill w-screen h-screen'>
+        </div>
+      </div>
+      <div class="w-full text-center" id="door">
+        <a href="https://manor.hackclub.com/" class="text-orange-500 underline">Open the door</a>
+      </div>
+      
+    </main>
+    <script>
+      const ANSWERS = ['milkyway', 'candy', 'toad', 'donut', 'baby'];
+      const n = ANSWERS.length;
+      const AUDIO_URLS = {
+        dark_background: "https://jwseph.github.io/manor-website/dark_background.wav",
+        echoes: "https://jwseph.github.io/manor-website/echoes.wav",
+        broken_glass: "https://jwseph.github.io/manor-website/broken_glass.wav",
+        scream: "https://jwseph.github.io/manor-website/scream.wav",
+      };
+      
+      function playAudio(audioName) {
+        new Audio(AUDIO_URLS[audioName]).play();
+      }
+      
+      function main() {
+        for (let i = 0; i < n; i++) {
+          $(`#riddleInput${i}`).on('input', function (e) {
+            let text = e.target.value;
+            text = text.toLowerCase().replaceAll(' ', '');
+            if (text == ANSWERS[i]) {
+              if (selected+1 == n) {
+                selectIndex(++selected);
+                return;  
+              }
+              
+              $(`#riddleInput${i}`).parent().hide();
+              $('body').hide();
+              playAudio('echoes');
+              setTimeout(() => {
+                $('body').show();
+                selectIndex(++selected);
+              }, 5000);
+            }
+          });
+        }
+        
+        let selected = 0;
+        selectIndex(selected);
+        
+        let clicked = false;
+        $(window).on('click focus keydown', () => {
+          if (clicked) return;
+          clicked = true;
+          playAudio('dark_background');
+          setInterval(() => {
+            playAudio('dark_background');
+          }, 68000);
+        });
+        
+      }
+      function selectIndex(idx) {
+        if (idx >= n) {
+          playAudio('broken_glass');
+          playAudio('scream');
+          $('#jumpscare').show();
+          setTimeout(() => $('#jumpscare').hide(), 1000);
+        }
+        for (let i = 0; i < n; i++) {
+          let el = $(`#riddleInput${i}`).parent();
+          i == idx ? el.show() : el.hide();
+        }
+      }
+      main();
+    </script>
+  </body>
+</html>
